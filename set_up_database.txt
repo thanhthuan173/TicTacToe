@@ -1,0 +1,14 @@
+sử dung SQLite studio để tạo bảng
+
+CREATE TABLE players (
+    playerID    INTEGER PRIMARY KEY AUTOINCREMENT
+                        NOT NULL,
+    playerName  TEXT    NOT NULL,
+    playerScore INTEGER DEFAULT (0),
+    EzAI        INTEGER DEFAULT (0),
+    HardAI              DEFAULT (0) 
+);
+
+insert into players ("playerName","playerScore","EzAI","HardAI") values ('thuan',3,0,0)
+
+đổi đường dẫn file path trong file Database.java
