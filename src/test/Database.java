@@ -113,4 +113,100 @@ public class Database {
             }
         }
     }
+
+    public int getPlayerEzAIScore(String playerName) {
+        String sql = "SELECT EzAI FROM players WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, playerName);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt("EzAI");
+                }
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void updatePlayerEzAIScore(String playerName, int score) {
+        String sql = "UPDATE players SET EzAI = ? WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, score);
+                pstmt.setString(2, playerName);
+                pstmt.executeUpdate();
+                return;
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public int getPlayerHardAIScore(String playerName) {
+        String sql = "SELECT HardAI FROM players WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, playerName);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt("HardAI");
+                }
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void updatePlayerHardAIScore(String playerName, int score) {
+        String sql = "UPDATE players SET HardAI = ? WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, score);
+                pstmt.setString(2, playerName);
+                pstmt.executeUpdate();
+                return;
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

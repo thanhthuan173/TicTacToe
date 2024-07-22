@@ -50,7 +50,7 @@ public class Home extends JFrame {
         btnOnePlayer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ChooseLevel().setVisible(true); // Chuyển sang ChooseLevel
+                new PlayerNameAI().setVisible(true); // Chuyển sang ChooseLevel
                 dispose(); // Đóng cửa sổ hiện tại
             }
         });
