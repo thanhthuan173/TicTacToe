@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package test;
 
 import javax.swing.*;
@@ -41,7 +37,7 @@ public class Play extends JFrame {
         player1ScoreField.setEditable(false);
         player2ScoreField = new JTextField("0");
         player2ScoreField.setEditable(false);
-        
+
         // Nhãn để hiển thị lượt đi của người chơi
         turnLabel = new JLabel();
         topPanel.add(new JLabel(player1 + ":"));
@@ -90,7 +86,7 @@ public class Play extends JFrame {
                 saveScores();
             }
         });
-        
+
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +94,7 @@ public class Play extends JFrame {
                 dispose();
             }
         });
-        
+
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -240,12 +236,4 @@ public class Play extends JFrame {
         }
         return true;
     }
-
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            // Đoạn code này sẽ không cần sử dụng trong ứng dụng khi sử dụng từ giao diện PlayerName
-//            // new Play("Player 1", "Player 2", new Database()).setVisible(true);
-//        });
-//    }
 }
-

@@ -1,81 +1,116 @@
 package test;
+
 import java.sql.*;
+import org.sqlite.SQLiteErrorCode;
 
 public class Database {
-    private Connection conn;
+    private static final String DB_URL = "jdbc:sqlite:D:\\HUFLIT\\Nam2_Ky3\\LT\\Java\\test\\src\\tictactoe.db";
+    private static final int MAX_RETRIES = 5;
 
     public Database() {
         try {
             // Đăng ký driver SQLite
             Class.forName("org.sqlite.JDBC");
-            // Kết nối đến cơ sở dữ liệu
-            conn = DriverManager.getConnection("jdbc:sqlite:D:\\HUFLIT\\Nam2_Ky3\\LT\\Java\\test\\src\\tictactoe.db");
         } catch (ClassNotFoundException e) {
             System.err.println("Failed to load SQLite JDBC driver.");
-            e.printStackTrace();
-        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    private Connection connect() throws SQLException {
+        return DriverManager.getConnection(DB_URL);
+    }
+
     public boolean playerExists(String playerName) {
-        try {
-            String sql = "SELECT * FROM players WHERE playerName = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, playerName);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sql = "SELECT * FROM players WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, playerName);
+                ResultSet rs = pstmt.executeQuery();
+                return rs.next();
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
         }
         return false;
     }
 
     public void addPlayer(String playerName) {
-        try {
-            String sql = "INSERT INTO players (playerName, playerScore, EzAI, HardAI) VALUES (?, 0, 0, 0)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, playerName);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sql = "INSERT INTO players (playerName, playerScore, EzAI, HardAI) VALUES (?, 0, 0, 0)";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, playerName);
+                pstmt.executeUpdate();
+                return;
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public int getPlayerScore(String playerName) {
-        try {
-            String sql = "SELECT playerScore FROM players WHERE playerName = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, playerName);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("playerScore");
+        String sql = "SELECT playerScore FROM players WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, playerName);
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt("playerScore");
+                }
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return 0;
     }
 
     public void updatePlayerScore(String playerName, int score) {
-        try {
-            String sql = "UPDATE players SET playerScore = ? WHERE playerName = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, score);
-            pstmt.setString(2, playerName);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void close() {
-        try {
-            if (conn != null) {
-                conn.close();
+        String sql = "UPDATE players SET playerScore = ? WHERE playerName = ?";
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try (Connection conn = connect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, score);
+                pstmt.setString(2, playerName);
+                pstmt.executeUpdate();
+                return;
+            } catch (SQLException e) {
+                if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

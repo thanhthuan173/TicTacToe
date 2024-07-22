@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class PlayerName extends JFrame {
     private JTextField player1Field;
     private JTextField player2Field;
-    private JButton startButton;  
+    private JButton startButton;
     private JButton homeButton;
     private Database db;
 
@@ -55,7 +55,7 @@ public class PlayerName extends JFrame {
                 }
             }
         });
-        
+
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,11 +64,4 @@ public class PlayerName extends JFrame {
             }
         });
     }
-
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-////            new PlayerName().setVisible(true);
-//        });
-//    }
 }
-
