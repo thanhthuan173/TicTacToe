@@ -54,12 +54,13 @@ public class PlayWithEz extends JFrame {
         add(boardPanel, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel();
+        JButton suggestButton = new JButton("Suggest");
         JButton restartButton = new JButton("Restart");
         JButton resetButton = new JButton("Reset");
         JButton saveButton = new JButton("Save");
         JButton homeButton = new JButton("Home");
         JButton exitButton = new JButton("Exit");
-
+        
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,6 +96,40 @@ public class PlayWithEz extends JFrame {
                 System.exit(0);
             }
         });
+       
+        suggestButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean suggested = false;
+            for (int i = 0; i < 3; i++) {
+              for (int j = 0; j < 3; j++) {
+                if (buttons[i][j].getText().equals("")) {
+                  buttons[i][j].setText("X");
+                  if (checkWin()) {
+                    buttons[i][j].setText("");
+                    buttons[i][j].setBackground(Color.yellow);
+                    suggested = true;
+                    break;
+                  } else {
+                    buttons[i][j].setText("");
+                  }
+                }
+              }
+              if (suggested) {
+                break;
+              }
+            }
+            if (!suggested) {
+              int x, y;
+              do {
+                x = random.nextInt(3);
+                y = random.nextInt(3);
+              } while (!buttons[x][y].getText().equals(""));
+              buttons[x][y].setBackground(Color.yellow);
+            }
+          }
+        });
+        bottomPanel.add(suggestButton);
 
         bottomPanel.add(restartButton);
         bottomPanel.add(resetButton);
@@ -130,6 +165,7 @@ public class PlayWithEz extends JFrame {
             for (int j = 0; j < 3; j++) {
                 buttons[i][j].setText("");
                 buttons[i][j].setEnabled(true);
+                buttons[i][j].setBackground(null);
             }
         }
     }
@@ -206,19 +242,27 @@ public class PlayWithEz extends JFrame {
 
     private boolean checkWin() {
         for (int i = 0; i < 3; i++) {
-            if (buttons[i][0].getText().equals(buttons[i][1].getText()) && buttons[i][1].getText().equals(buttons[i][2].getText()) && !buttons[i][0].getText().equals("")) {
+            if (buttons[i][0].getText().equals(buttons[i][1].getText()) && 
+                buttons[i][1].getText().equals(buttons[i][2].getText()) && 
+                !buttons[i][0].getText().equals("")) {
                 return true;
             }
-            if (buttons[0][i].getText().equals(buttons[1][i].getText()) && buttons[1][i].getText().equals(buttons[2][i].getText()) && !buttons[0][i].getText().equals("")) {
+            if (buttons[0][i].getText().equals(buttons[1][i].getText()) && 
+                buttons[1][i].getText().equals(buttons[2][i].getText()) && 
+                !buttons[0][i].getText().equals("")) {
                 return true;
             }
         }
 
-        if (buttons[0][0].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][2].getText()) && !buttons[0][0].getText().equals("")) {
+        if (buttons[0][0].getText().equals(buttons[1][1].getText()) && 
+                buttons[1][1].getText().equals(buttons[2][2].getText()) && 
+                !buttons[0][0].getText().equals("")) {
             return true;
         }
 
-        if (buttons[0][2].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][0].getText()) && !buttons[0][2].getText().equals("")) {
+        if (buttons[0][2].getText().equals(buttons[1][1].getText()) && 
+            buttons[1][1].getText().equals(buttons[2][0].getText()) && 
+            !buttons[0][2].getText().equals("")) {
             return true;
         }
 

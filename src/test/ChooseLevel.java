@@ -40,7 +40,7 @@ public class ChooseLevel extends JFrame {
         btnEasy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new PlayWithEz(player, db).setVisible(true);
+                new ChooseSizeEz(player, db).setVisible(true);
                 dispose();
             }
         });
@@ -48,7 +48,7 @@ public class ChooseLevel extends JFrame {
         btnHard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new PlayWithHard(player, db).setVisible(true);
+                new ChooseSizeHard(player, db).setVisible(true);
                 dispose();
             }
         });

@@ -25,7 +25,7 @@ public class Settings extends JFrame {
     private static Clip clip;
     private static FloatControl volumeControl;
     private static boolean isMusicPlaying = false;
-    private static String musicFilePath = "D:\\HUFLIT\\Nam2_Ky3\\LT\\Java\\test\\music.wav";
+    private static String musicFilePath = "E:\\DoAn\\Java\\TicTacToe\\music.wav";
     private static float volume = 0.5f; // Initial volume (0.0 to 1.0)
 
     public Settings() {

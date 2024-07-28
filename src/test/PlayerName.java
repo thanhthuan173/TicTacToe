@@ -48,7 +48,7 @@ public class PlayerName extends JFrame {
 
                 if (!player1.isEmpty() && !player2.isEmpty()) {
                     // Chuyển sang class Play
-                    new Play(player1, player2, db).setVisible(true);
+                    new ChooseSize(player1, player2, db).setVisible(true);
                     dispose(); // Đóng cửa sổ nhập tên người chơi
                 } else {
                     JOptionPane.showMessageDialog(null, "Please enter names for both players.");

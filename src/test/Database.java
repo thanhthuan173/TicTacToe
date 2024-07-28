@@ -4,7 +4,7 @@ import java.sql.*;
 import org.sqlite.SQLiteErrorCode;
 
 public class Database {
-    private static final String DB_URL = "jdbc:sqlite:D:\\HUFLIT\\Nam2_Ky3\\LT\\Java\\test\\src\\tictactoe.db";
+    private static final String DB_URL = "jdbc:sqlite:E:\\DoAn\\Java\\dbtictactoe\\tictactoe.db";
     private static final int MAX_RETRIES = 5;
 
     public Database() {

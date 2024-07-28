@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class PlayWithHard extends JFrame {
     private Database db;
@@ -13,10 +14,12 @@ public class PlayWithHard extends JFrame {
     private String player;
     private int playerScore;
     private boolean playerTurn;
+    private Random random;
 
     public PlayWithHard(String player, Database db) {
         this.player = player;
         this.db = db;
+        random = new Random();
         initComponents();
         startGame();
     }
@@ -51,6 +54,7 @@ public class PlayWithHard extends JFrame {
         add(boardPanel, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel();
+        JButton suggestButton = new JButton("Suggest");
         JButton restartButton = new JButton("Restart");
         JButton resetButton = new JButton("Reset");
         JButton saveButton = new JButton("Save");
@@ -92,6 +96,40 @@ public class PlayWithHard extends JFrame {
                 System.exit(0);
             }
         });
+        
+        suggestButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean suggested = false;
+            for (int i = 0; i < 3; i++) {
+              for (int j = 0; j < 3; j++) {
+                if (buttons[i][j].getText().equals("")) {
+                  buttons[i][j].setText("X");
+                  if (checkWin()) {
+                    buttons[i][j].setText("");
+                    buttons[i][j].setBackground(Color.yellow);
+                    suggested = true;
+                    break;
+                  } else {
+                    buttons[i][j].setText("");
+                  }
+                }
+              }
+              if (suggested) {
+                break;
+              }
+            }
+            if (!suggested) {
+              int x, y;
+              do {
+                x = random.nextInt(3);
+                y = random.nextInt(3);
+              } while (!buttons[x][y].getText().equals(""));
+              buttons[x][y].setBackground(Color.yellow);
+            }
+          }
+        });
+        bottomPanel.add(suggestButton);
 
         bottomPanel.add(restartButton);
         bottomPanel.add(resetButton);
@@ -127,6 +165,7 @@ public class PlayWithHard extends JFrame {
             for (int j = 0; j < 3; j++) {
                 buttons[i][j].setText("");
                 buttons[i][j].setEnabled(true);
+                buttons[i][j].setBackground(null);
             }
         }
     }
@@ -259,25 +298,33 @@ public class PlayWithHard extends JFrame {
 
     private int evaluate() {
         for (int row = 0; row < 3; row++) {
-            if (buttons[row][0].getText().equals(buttons[row][1].getText()) && buttons[row][1].getText().equals(buttons[row][2].getText())) {
+            if (buttons[row][0].getText().equals(buttons[row][1].getText()) && 
+                buttons[row][1].getText().equals(buttons[row][2].getText()) &&
+                !buttons[row][0].getText().equals("")) {
                 if (buttons[row][0].getText().equals("O")) return 10;
                 else if (buttons[row][0].getText().equals("X")) return -10;
             }
         }
 
         for (int col = 0; col < 3; col++) {
-            if (buttons[0][col].getText().equals(buttons[1][col].getText()) && buttons[1][col].getText().equals(buttons[2][col].getText())) {
+            if (buttons[0][col].getText().equals(buttons[1][col].getText()) && 
+                buttons[1][col].getText().equals(buttons[2][col].getText()) &&
+                !buttons[0][col].getText().equals("")) {
                 if (buttons[0][col].getText().equals("O")) return 10;
                 else if (buttons[0][col].getText().equals("X")) return -10;
             }
         }
 
-        if (buttons[0][0].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][2].getText())) {
+        if (buttons[0][0].getText().equals(buttons[1][1].getText()) && 
+            buttons[1][1].getText().equals(buttons[2][2].getText()) &&
+            !buttons[0][0].getText().equals("")) {
             if (buttons[0][0].getText().equals("O")) return 10;
             else if (buttons[0][0].getText().equals("X")) return -10;
         }
 
-        if (buttons[0][2].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][0].getText())) {
+        if (buttons[0][2].getText().equals(buttons[1][1].getText()) && 
+            buttons[1][1].getText().equals(buttons[2][0].getText())&&
+            !buttons[0][2].getText().equals("")) {
             if (buttons[0][2].getText().equals("O")) return 10;
             else if (buttons[0][2].getText().equals("X")) return -10;
         }
@@ -287,19 +334,27 @@ public class PlayWithHard extends JFrame {
 
     private boolean checkWin() {
         for (int i = 0; i < 3; i++) {
-            if (buttons[i][0].getText().equals(buttons[i][1].getText()) && buttons[i][1].getText().equals(buttons[i][2].getText()) && !buttons[i][0].getText().equals("")) {
+            if (buttons[i][0].getText().equals(buttons[i][1].getText()) && 
+                    buttons[i][1].getText().equals(buttons[i][2].getText()) && 
+                    !buttons[i][0].getText().equals("")) {
                 return true;
             }
-            if (buttons[0][i].getText().equals(buttons[1][i].getText()) && buttons[1][i].getText().equals(buttons[2][i].getText()) && !buttons[0][i].getText().equals("")) {
+            if (buttons[0][i].getText().equals(buttons[1][i].getText()) && 
+                    buttons[1][i].getText().equals(buttons[2][i].getText()) && 
+                    !buttons[0][i].getText().equals("")) {
                 return true;
             }
         }
 
-        if (buttons[0][0].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][2].getText()) && !buttons[0][0].getText().equals("")) {
+        if (buttons[0][0].getText().equals(buttons[1][1].getText()) && 
+                buttons[1][1].getText().equals(buttons[2][2].getText()) && 
+                !buttons[0][0].getText().equals("")) {
             return true;
         }
 
-        if (buttons[0][2].getText().equals(buttons[1][1].getText()) && buttons[1][1].getText().equals(buttons[2][0].getText()) && !buttons[0][2].getText().equals("")) {
+        if (buttons[0][2].getText().equals(buttons[1][1].getText()) && 
+                buttons[1][1].getText().equals(buttons[2][0].getText()) && 
+                !buttons[0][2].getText().equals("")) {
             return true;
         }
 
